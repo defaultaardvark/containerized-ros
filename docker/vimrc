@@ -1,0 +1,95 @@
+" REFERENCE --------------------------------------------------------------- {{{
+"" nnoremap – Allows you to map keys in normal mode.
+"" inoremap – Allows you to map keys in insert mode.
+"" vnoremap – Allows you to map keys in visual mode.
+" }}}
+
+" System
+set nocompatible
+filetype on
+filetype plugin indent on
+set nobackup
+
+" Readability
+syntax on
+set number
+set relativenumber
+set nowrap
+
+" Tabbing
+set shiftwidth=4
+set tabstop=4
+set expandtab
+
+" Cursor
+set scrolloff=9999
+set cursorline
+
+" Searching
+set incsearch
+set ignorecase
+set smartcase
+set showmatch
+set hlsearch
+
+" User Interface
+set showcmd
+set showmode
+set history=1000
+
+" File Searching
+set wildmenu
+set wildmode=list:longest
+set wildignore=*.docx,*.jpg,*.png,*.gif,*.pdf,*.pyc,*.exe,*.flv,*.img,*.xlsx
+
+" Organization
+"" Starts all folds open by default
+set foldlevelstart=99
+
+" VIMSCRIPT -------------------------------------------------------------- {{{
+" Enables code folding
+augroup filetype_vim
+    autocmd!
+    autocmd FileType vim setlocal foldmethod=marker
+augroup END
+" }}}
+
+" MAPPINGS --------------------------------------------------------------- {{{
+"" Compatibility
+map <C-a> <Nop>
+map <Space> <Nop>
+
+let mapleader = "Space"
+
+"" Clears search highlighting
+nnoremap <silent> <C-l> :nohl<CR><C-l>
+" }}}
+
+" STATUS LINE ------------------------------------------------------------ {{{
+" }}}
+
+" PLUGINS ---------------------------------------------------------------- {{{
+call plug#begin('~/.vim/plugged')
+"" Add plugins here
+Plug 'catppuccin/vim', { 'as': 'catppuccin' }
+call plug#end()
+" }}}
+
+" Colors
+set termguicolors
+set background=dark
+colorscheme catppuccin_mocha
+set t_Co=256
+hi Normal guibg=NONE ctermbg=NONE
+
+let t:is_transparent = 1
+function! Toggle_transparent()
+    if t:is_transparent == 0
+        hi Normal guibg=NONE ctermbg=NONE
+        let t:is_transparent = 1
+    else
+        set background=dark
+        let t:is_transparent = 0
+    endif
+endfunction
+nnoremap <C-t> : call Toggle_transparent()<CR>

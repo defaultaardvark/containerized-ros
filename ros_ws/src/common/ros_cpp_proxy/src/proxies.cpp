@@ -1,0 +1,1 @@
+#include "ros_cpp_proxy/publisher_proxy.hpp"

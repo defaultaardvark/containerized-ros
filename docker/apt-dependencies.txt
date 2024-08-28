@@ -1,0 +1,16 @@
+curl
+gdb
+git
+mesa-common-dev
+netcat
+python3-colcon-common-extensions
+python3-pip
+python3-rosdep
+python3-vcstool
+ripgrep
+rsync
+software-properties-common
+tree
+vim
+wget
+zsh

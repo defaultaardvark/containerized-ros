@@ -1,0 +1,55 @@
+---
+services:
+  codebase_initializer:
+    container_name: codebase_initializer
+    image: ros_codebase:latest
+    build:
+      context: .
+      dockerfile_inline: |
+        FROM alpine:latest
+        COPY ros_ws /tmp/ros_ws
+    command: /bin/sh -c "cp -r /tmp/ros_ws/* /root/ros_ws/"
+    volumes:
+      - ros_codebase:/root/ros_ws
+    deploy:
+      restart_policy:
+        condition: none
+
+  codebase:
+    image: ros_codebase:latest
+    container_name: ros_codebase
+    working_dir: /root/ros_ws/src
+    depends_on:
+      - codebase_initializer
+    volumes:
+      - ros_codebase:/root/ros_ws
+    stdin_open: true
+    tty: true
+
+  ros_workspace:
+    image: ros_workspace:latest
+    build:
+      context: docker/
+    container_name: ros_workspace
+    working_dir: /root/ros_ws/src
+    environment:
+      DISPLAY: ${DISPLAY}
+    depends_on:
+      - codebase
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ${HOME}/logs:/root/ros_ws/logs
+      - ros_codebase:/root/ros_ws
+    entrypoint: /bin/zsh
+    stdin_open: true
+    tty: true
+    networks:
+      - ros-network
+
+volumes:
+  ros_codebase:
+
+networks:
+  ros-network:
+    driver: bridge
+
