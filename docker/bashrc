@@ -1,0 +1,16 @@
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
+fi
+
+if [ -d "$HOME"/.bashrc.d ]; then
+    for i in "$HOME"/.bashrc.d/*.sh; do
+        if [ -f "$i" ]; then
+            source "$i"
+        fi
+    done
+    unset i
+fi
+
+cd() { builtin cd "$@" && ls; }
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash

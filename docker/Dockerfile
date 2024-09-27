@@ -36,23 +36,12 @@ RUN mkdir -p /third_party_libs/btm && \
 RUN curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-    ## zsh
-RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --
-
-RUN git clone https://github.com/zsh-users/zsh-autosuggestions.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-
-    ## syntax highlighting
-RUN git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting && \
-    git clone https://github.com/zdharma-continuum/fast-syntax-highlighting.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting
-
-    ## zoxide
-RUN curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
-
 RUN rm -rf /var/lib/apt/lists/*
 
 COPY vimrc .vimrc
-COPY zshrc .zshrc
-COPY oh-my-zsh .oh-my-zsh
+COPY bashrc .bashrc
+COPY bashrc.d .bashrc.d
+COPY ros_entrypoint.sh /ros_entrypoint.sh
 
 WORKDIR /root/ros_ws
-SHELL ["/bin/zsh", "-o", "pipefail", "-c"]
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]

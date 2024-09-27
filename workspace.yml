@@ -1,0 +1,76 @@
+---
+services:
+  # codebase_initializer:
+  #   container_name: codebase_initializer
+  #   image: ros_codebase:latest
+  #   build:
+  #     context: .
+  #     dockerfile_inline: |
+  #       FROM alpine:latest
+  #       COPY ros_ws/src /tmp/ros_ws/src
+  #   command: /bin/sh -c "cp -r /tmp/ros_ws/src/* /root/ros_ws/src && rm -r /tmp/ros_ws"
+  #   volumes:
+  #     - ros_codebase:/root/ros_ws/src
+  #   deploy:
+  #     restart_policy:
+  #       condition: none
+
+  # codebase:
+  #   image: ros_codebase:latest
+  #   container_name: ros_codebase
+  #   working_dir: /root/ros_ws/src
+  #   depends_on:
+  #     - codebase_initializer
+  #   volumes:
+  #     - ros_codebase:/root/ros_ws/src
+  #   stdin_open: true
+  #   tty: true
+      
+  codebase:
+    container_name: codebase
+    image: ros_codebase:latest
+    build:
+      context: .
+      dockerfile_inline: |
+        FROM alpine:latest
+        COPY ros_ws/src /tmp/ros_ws/src
+        RUN /bin/sh -c "mkdir -p /root/ros_ws/src"
+        RUN /bin/sh -c "cp -r /tmp/ros_ws/src/* /root/ros_ws/src"
+        RUN /bin/sh -c "rm -r /tmp/ros_ws"
+    working_dir: /root/ros_ws/src
+    volumes:
+      - src:/root/ros_ws/src
+    stdin_open: true
+    tty: true
+
+  ros_workspace:
+    image: ros_workspace:latest
+    build:
+      context: docker/
+    container_name: ros_workspace
+    working_dir: /root/ros_ws/src
+    environment:
+      DISPLAY: ${DISPLAY}
+    depends_on:
+      - codebase
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - src:/root/ros_ws/src
+      - build:/root/ros_ws/build
+      - install:/root/ros_ws/install
+      - log:/root/ros_ws/log
+    stdin_open: true
+    tty: true
+    networks:
+      - ros-network
+
+volumes:
+  code:
+  build:
+  install:
+  log:
+
+networks:
+  ros-network:
+    driver: bridge
+

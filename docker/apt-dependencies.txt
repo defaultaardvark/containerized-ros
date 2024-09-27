@@ -13,4 +13,3 @@ software-properties-common
 tree
 vim
 wget
-zsh

@@ -22,6 +22,7 @@ namespace publisher
 
     void StrPublisher::populateMsg()
     {
+        RCLCPP_INFO_STREAM_ONCE(node_->get_logger(), "data: " << str_data_);
         msg_.data = str_data_;
     }
 

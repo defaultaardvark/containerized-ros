@@ -1,6 +1,8 @@
 #ifndef _STR_PUBLISHER__HPP_
 #define _STR_PUBLISHER__HPP_
 
+#include <rclcpp/logger.hpp>
+
 #include <std_msgs/msg/string.hpp>
 
 #include "ros_cpp_proxy/publisher_proxy.hpp"

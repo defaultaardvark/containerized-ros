@@ -1,0 +1,72 @@
+---
+services:
+  # codebase_initializer:
+  #   extends:
+  #     file: workspace.yml
+  #     service: codebase_initializer
+
+  codebase:
+    extends:
+      file: workspace.yml
+      service: codebase
+        # depends_on:
+        #   codebase_initializer:
+        #     condition: service_completed_successfully
+
+  ros_workspace:
+    extends:
+      file: workspace.yml
+      service: ros_workspace
+    depends_on:
+      - codebase
+
+  build_workspace:
+    image: ros_buildspace:latest
+    container_name: build_workspace
+    build:
+      context: .
+      dockerfile_inline: | 
+        FROM ros_workspace:latest
+        WORKDIR /root/ros_ws
+    working_dir: /root/ros_ws
+    command: >
+        colcon build
+    volumes:
+      - src:/root/ros_ws/src
+      - build:/root/ros_ws/build
+      - install:/root/ros_ws/install
+      - log:/root/ros_ws/log
+    depends_on:
+      - ros_workspace
+    deploy:
+      restart_policy:
+        condition: none
+
+  str_publisher:
+    image: ros_buildspace:latest
+    container_name: str_publisher
+    depends_on:
+      build_workspace:
+        condition: service_completed_successfully
+    working_dir: /root/ros_ws
+    command: >
+      ros2 launch cpp_pub str_publisher.launch.py do_timer:=true
+    environment:
+      DISPLAY: ${DISPLAY}
+    volumes:
+      - build:/root/ros_ws/build
+      - install:/root/ros_ws/install
+    stdin_open: true
+    tty: true
+    networks:
+      - ros-network
+
+volumes:
+  src:
+  build:
+  install:
+  log:
+
+networks:
+  ros-network:
+    driver: bridge
