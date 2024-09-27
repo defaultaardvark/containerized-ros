@@ -56,6 +56,11 @@ services:
 
 volumes:
   src:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ros_ws/src
   build:
   install:
   log:

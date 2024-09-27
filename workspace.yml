@@ -3,15 +3,7 @@ services:
       
   codebase:
     container_name: codebase
-    image: ros_codebase:latest
-    build:
-      context: .
-      dockerfile_inline: |
-        FROM alpine:latest
-        COPY ros_ws/src /tmp/ros_ws/src
-        RUN /bin/sh -c "mkdir -p /root/ros_ws/src"
-        RUN /bin/sh -c "cp -r /tmp/ros_ws/src/* /root/ros_ws/src"
-        RUN /bin/sh -c "rm -r /tmp/ros_ws"
+    image: alpine:latest
     working_dir: /root/ros_ws/src
     volumes:
       - src:/root/ros_ws/src
@@ -40,7 +32,12 @@ services:
       - ros-network
 
 volumes:
-  code:
+  src:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ros_ws/src
   build:
   install:
   log:

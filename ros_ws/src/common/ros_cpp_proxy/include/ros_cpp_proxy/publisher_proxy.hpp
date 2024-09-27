@@ -2,6 +2,7 @@
 #define _PUBLISHER_PROXY__HPP_
 
 #include <rclcpp/rclcpp.hpp>
+#include <rclcpp/logger.hpp>
 
 namespace ros_proxy
 {
@@ -94,7 +95,9 @@ void PublisherProxy<MsgType>::initRos()
 template <typename MsgType>
 void PublisherProxy<MsgType>::publishMsg()
 {
+    RCLCPP_INFO_STREAM(node_->get_logger(), "data: " << msg_.data);
     publisher_->publish(msg_);
+    RCLCPP_INFO_STREAM(node_->get_logger(), "haha peepo");
 }
 } // namespace ros_proxy
 
