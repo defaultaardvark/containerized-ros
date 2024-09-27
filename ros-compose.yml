@@ -1,17 +1,10 @@
 ---
 services:
-  # codebase_initializer:
-  #   extends:
-  #     file: workspace.yml
-  #     service: codebase_initializer
 
   codebase:
     extends:
       file: workspace.yml
       service: codebase
-        # depends_on:
-        #   codebase_initializer:
-        #     condition: service_completed_successfully
 
   ros_workspace:
     extends:

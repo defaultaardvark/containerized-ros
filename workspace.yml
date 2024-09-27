@@ -1,30 +1,5 @@
 ---
 services:
-  # codebase_initializer:
-  #   container_name: codebase_initializer
-  #   image: ros_codebase:latest
-  #   build:
-  #     context: .
-  #     dockerfile_inline: |
-  #       FROM alpine:latest
-  #       COPY ros_ws/src /tmp/ros_ws/src
-  #   command: /bin/sh -c "cp -r /tmp/ros_ws/src/* /root/ros_ws/src && rm -r /tmp/ros_ws"
-  #   volumes:
-  #     - ros_codebase:/root/ros_ws/src
-  #   deploy:
-  #     restart_policy:
-  #       condition: none
-
-  # codebase:
-  #   image: ros_codebase:latest
-  #   container_name: ros_codebase
-  #   working_dir: /root/ros_ws/src
-  #   depends_on:
-  #     - codebase_initializer
-  #   volumes:
-  #     - ros_codebase:/root/ros_ws/src
-  #   stdin_open: true
-  #   tty: true
       
   codebase:
     container_name: codebase
